@@ -1,0 +1,39 @@
+# app.py
+
+import streamlit as st
+import pytesseract
+from PIL import Image
+import pdfplumber
+import tempfile
+
+st.set_page_config(page_title="FormMate AI", layout="centered")
+
+st.title("📄 FormMate AI")
+st.subheader("Your smart assistant for form filling!")
+
+uploaded_file = st.file_uploader("Upload a scanned document (PDF or Image)", type=["png", "jpg", "jpeg", "pdf"])
+
+def extract_text_from_image(image):
+    text = pytesseract.image_to_string(image)
+    return text
+
+def extract_text_from_pdf(pdf_file):
+    text = ""
+    with pdfplumber.open(pdf_file) as pdf:
+        for page in pdf.pages:
+            text += page.extract_text() + "\n"
+    return text
+
+if uploaded_file is not None:
+    st.success("File uploaded successfully!")
+    
+    if uploaded_file.type == "application/pdf":
+        text = extract_text_from_pdf(uploaded_file)
+    else:
+        image = Image.open(uploaded_file)
+        text = extract_text_from_image(image)
+
+    st.subheader("🧾 Extracted Text:")
+    st.text_area("Here's what we found in your file:", text, height=300)
+
+    # Later: use NLP to extract fields like name, school, etc.
