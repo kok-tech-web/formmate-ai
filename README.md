@@ -1,2 +1,2 @@
 # formmate-ai
-It helps people fill any type of forms mostly scholarship and visa.
+It helps peopleor make it easier fill any type of forms; mostly scholarship and visa forms.
